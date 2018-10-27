@@ -96,7 +96,6 @@ const generateRectangle = function (rectangleType,width,height) {
     return alternatingRectangle(width,height);
 }
 
-exports.generateRectangle = generateRectangle;
 
 //----------------------triangle-----------
 const leftRowsGeneration = function(rows) {
@@ -152,7 +151,6 @@ const generateTriangle = function (triangleAlignment,base) {
     return generateRightTriangle(base);
 
 }
-exports.generateTriangle = generateTriangle;
 
 //-----------------
 
@@ -324,4 +322,6 @@ const generateDiamond = function(diamondType,width) {
   if(diamondType == "angled")
     return generateAngledDiamond(width);
 }
+exports.generateRectangle = generateRectangle;
+exports.generateTriangle = generateTriangle;
 exports.generateDiamond = generateDiamond;
