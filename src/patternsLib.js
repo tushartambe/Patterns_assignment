@@ -153,3 +153,175 @@ const generateTriangle = function (triangleAlignment,base) {
 
 }
 exports.generateTriangle = generateTriangle;
+
+//-----------------
+
+const upperFilledTriangle = function(width) {
+  let message = "";
+  let upperTriangle = "";
+  let newline = "";
+  for(let rows=1; rows<=width; rows+=2){
+    for(let spaces = 1; spaces <=width - rows; spaces+=2){
+      message += " ";
+    }
+    for(let columns= 1; columns<=rows; columns++){
+      message += "*";
+    }
+    upperTriangle = upperTriangle + newline + message;
+    newline = "\n";
+    message = "";
+  }
+  return upperTriangle;
+}
+
+const lowerFilledTriangle = function(width) {
+  let message = "";
+  let lowerTriangle = "";
+  let newline = "";
+  for(let rows=width-2; rows>=1; rows-=2){
+    for(let spaces = 1; spaces <=width - rows; spaces+=2){
+      message += " ";
+    }
+    for(let columns= 1; columns<=rows; columns++){
+      message += "*";
+    }
+    lowerTriangle = lowerTriangle + newline + message;
+    newline = "\n";
+    message = "";
+  }
+  return lowerTriangle;
+} 
+
+const generateFilledDiamond = function(width) {
+  return upperFilledTriangle(width) + "\n" + lowerFilledTriangle(width);
+}
+
+const upperHollowTriangle = function(width) {
+  let message = "";
+  let upperTriangle = "";
+  let newline = "";
+  for(let rows=1; rows<=width; rows+=2){
+    for(let spaces = 1; spaces <=width - rows; spaces+=2){
+      message += " ";
+    }
+    let character = "";
+    for(let columns= 1; columns<=rows; columns++){
+      if ( columns == 1 || columns == rows) {
+        message += "*";
+      } else {
+        message += " ";
+      }
+    }
+    upperTriangle = upperTriangle + newline + message;
+    newline = "\n";
+    message = "";
+  }
+  return upperTriangle;
+}
+
+const lowerHollowTriangle = function(width) {
+  let message = "";
+  let lowerTriangle = "";
+  let newline = "";
+  for(let rows=width-2; rows>=1; rows-=2){
+    for(let spaces = 1; spaces <=width - rows; spaces+=2){
+      message += " ";
+    }
+    for(let columns= 1; columns<=rows; columns++){
+      if ( columns == 1 || columns == rows) {
+        message += "*";
+      } else {
+        message += " ";
+      }
+    }
+    lowerTriangle = lowerTriangle + newline + message;
+    newline = "\n";
+    message = "";
+  }
+  return lowerTriangle;
+} 
+
+const generateHollowDiamond = function(width) {
+  return upperHollowTriangle(width) + "\n" + lowerHollowTriangle(width);
+}
+
+const upperAngledTraingle = function(width) {
+  let message = "";
+  let newline = "";
+  let upperTriangle = "";
+  for(let rows=1; rows<=width; rows+=2){
+    for(let spaces = 1; spaces <=width - rows; spaces+=2){
+      message += " ";
+    }
+    for(let columns= 1; columns<=rows; columns++){
+      if ( columns == 1 || columns == rows) {
+        if( rows == 1 || rows == width){
+          message += "*";
+        } else {
+          if( columns == 1) {
+          message += "/";
+          }else {
+            message += "\\";
+          }
+        }
+
+      } else {
+        message += " ";
+      }
+    }
+    upperTriangle = upperTriangle + newline + message;
+    newline = "\n";
+    message = "";
+  }
+  return upperTriangle;
+}
+
+const lowerAngledTriangle = function(width) {
+  let message = "";
+  let lowerTriangle = "";
+  let newline = "";
+  for(let rows=width-2; rows>=1; rows-=2){
+    for(let spaces = 1; spaces <=width - rows; spaces+=2){
+      message += " ";
+    }
+    for(let columns= 1; columns<=rows; columns++){
+      if ( columns == 1 || columns == rows) {
+        if( rows == width | rows == 1){
+          message += "*";
+        } else {
+          if( columns == 1) {
+            message += "\\";
+          } else {
+            message += "/";
+          }
+        }
+      } else {
+        message += " ";
+      }
+    }
+    lowerTriangle = lowerTriangle + newline + message;
+    newline = "\n";
+    message = "";
+  }
+  return lowerTriangle;
+} 
+
+const generateAngledDiamond = function(width) {
+  return upperAngledTraingle(width) + "\n" + lowerAngledTriangle(width);
+}
+
+const generateDiamond = function(diamondType,width) {
+  if(width % 2 == 0) {
+    width = width - 1;
+  }
+
+  if (diamondType == "filled") 
+    return generateFilledDiamond(width);
+
+  if(diamondType == "hollow") 
+    return generateHollowDiamond(width);
+
+  if(diamondType == "angled")
+    return generateAngledDiamond(width);
+}
+exports.generateDiamond = generateDiamond;
