@@ -1,37 +1,33 @@
 const generateFilledRectangle = function(width,height) {
   let filledRect = "";
   let newline = "";
-  let message;
   for(let rows = 1; rows <= height ; rows++) {
-    message = "";
-    for(let columns = 1; columns <= width ; columns++) {
-      message = message + "*";
-    }
-    filledRect = filledRect + newline + message;
+    filledRect = filledRect + newline + repeat('*',width);
     newline = "\n";
   }
   return filledRect;
 }
-//-----------------emptyrectangle----------
-const firstAndLastLine = function(width) {
-  let message="";
-  for(let columns = 1; columns <= width ; columns++) {
-    message += "*";
+
+const repeat = function (character, noOfTimes) {
+  let line = '';
+  for (let count = 0; count < noOfTimes; count++) {
+    line = line + character;
   }
-  return message;
+  return line;
+};
+
+emptyLineGenerator = function(terminalCharacter,middleCharacter,width) {
+  let emptyLine = terminalCharacter + repeat(middleCharacter,width-2) + terminalCharacter;
+  return emptyLine;
 }
 
-const middleRows = function (width) {
-  let message = "*";
-  let character = ""; 
-  for(let columns = 1; columns <= width ; columns++) {
-    message = message + character;
-    character = " ";
-    if ( columns == width-1) {
-      character = "*";
-    }
-  }
-  return message;
+//-----------------emptyrectangle----------
+const firstAndLastLine = function(width) {
+  return repeat('*',width);
+}
+
+const emptyMiddleLines = function (width) {
+  return emptyLineGenerator('*',' ',width);
 }
 
 const generateEmptyRectangle = function(width,height) {
@@ -43,7 +39,7 @@ const generateEmptyRectangle = function(width,height) {
     if(rows == 1 || rows == height) {
       message += firstAndLastLine(width);
     }else {
-      message += middleRows(width);
+      message += emptyMiddleLines(width);
     }
     emptyRect = emptyRect + newline + message;
     newline = "\n";
@@ -53,19 +49,11 @@ const generateEmptyRectangle = function(width,height) {
 //------------------------------------------
 
 const oddRow = function (width) {
-  let message = ""; 
-  for(let columns = 1; columns <= width ; columns++) {
-    message +=  "*";
-  }
-  return message;
+  return repeat('*',width);
 }
 
 const evenRow = function (width) {
-  let message = "";
-  for(let columns = 1; columns <= width ; columns++) {
-    message += "-";
-  }
-  return message;
+  return repeat('-',width);
 }
 
 const generateAlternatingRectangle = function(width,height) {
