@@ -1,4 +1,4 @@
-const filledRectangle = function(width,height) {
+const generateFilledRectangle = function(width,height) {
   let filledRect = "";
   let newline = "";
   let message;
@@ -34,7 +34,7 @@ const middleRows = function (width) {
   return message;
 }
 
-const emptyRectangle = function(width,height) {
+const generateEmptyRectangle = function(width,height) {
   let message;
   let emptyRect = "";
   let newline = "";
@@ -68,7 +68,7 @@ const evenRow = function (width) {
   return message;
 }
 
-const alternatingRectangle = function(width,height) {
+const generateAlternatingRectangle = function(width,height) {
   let message;
   let newline = "";
   let alternatingRect ="";
@@ -86,14 +86,8 @@ const alternatingRectangle = function(width,height) {
 }
 
 const generateRectangle = function (rectangleType,width,height) {
-  if ( rectangleType == "filled")
-    return filledRectangle(width,height);
-
-  if( rectangleType == "empty") 
-    return emptyRectangle(width,height);
-
-  if ( rectangleType == "alternating") 
-    return alternatingRectangle(width,height);
+  let object  = { filled : generateFilledRectangle, empty : generateEmptyRectangle, alternating :generateAlternatingRectangle };
+  return object[rectangleType](width,height);
 }
 
 
@@ -144,12 +138,8 @@ const generateRightTriangle = function(base) {
 }
 //-----------------
 const generateTriangle = function (triangleAlignment,base) {
-  if ( triangleAlignment == "left") 
-    return generateLeftTriangle(base);
-
-  if ( triangleAlignment == "right") 
-    return generateRightTriangle(base);
-
+  let object  = { left : generateLeftTriangle, right : generateRightTriangle }
+  return object[triangleAlignment](base);
 }
 
 //-----------------
@@ -257,12 +247,11 @@ const upperAngledTraingle = function(width) {
           message += "*";
         } else {
           if( columns == 1) {
-          message += "/";
+            message += "/";
           }else {
             message += "\\";
           }
         }
-
       } else {
         message += " ";
       }
@@ -312,15 +301,8 @@ const generateDiamond = function(diamondType,width) {
   if(width % 2 == 0) {
     width = width - 1;
   }
-
-  if (diamondType == "filled") 
-    return generateFilledDiamond(width);
-
-  if(diamondType == "hollow") 
-    return generateHollowDiamond(width);
-
-  if(diamondType == "angled")
-    return generateAngledDiamond(width);
+  let object  = { filled : generateFilledDiamond, hollow : generateHollowDiamond, angled :generateAngledDiamond };
+  return object[diamondType](width);
 }
 exports.generateRectangle = generateRectangle;
 exports.generateTriangle = generateTriangle;

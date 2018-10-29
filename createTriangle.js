@@ -1,11 +1,9 @@
 const generateTriangle = require('./src/patternsLib.js').generateTriangle;
+const getPatternData = require('./src/patternsUtil.js').getPatternData;
 
-const main = function() {
-  let triangleAlignment = process.argv[2];
-  let base = +process.argv[3];
-
- console.log(generateTriangle(triangleAlignment,base));
+const triangleMain = function() {
+  let {type,width} = getPatternData(process.argv);
+ console.log(generateTriangle(type, width));
 }
 
-main();
-
+triangleMain();

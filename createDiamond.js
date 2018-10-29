@@ -1,9 +1,10 @@
 const generateDiamond = require('./src/patternsLib.js').generateDiamond;
+const getPatternData = require('./src/patternsUtil.js').getPatternData;
 
 const diamondMain = function() {
-  let diamondType = process.argv[2];
-  let width = +process.argv[3];
-  console.log(generateDiamond(diamondType,width));
+  let {type,width} = getPatternData(process.argv);
+ console.log(generateDiamond(type, width));
+
 }
 
 diamondMain();
