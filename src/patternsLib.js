@@ -80,13 +80,6 @@ const generateRectangle = function (rectangleType,width,height) {
 
 
 //----------------------triangle-----------
-const leftRowsGeneration = function(rows) {
-  let message = "";
-  for(let columns = 1; columns <= rows; columns++) {
-    message += "*";
-  }
-  return message;
-}
 
 const generateLeftTriangle = function(base) {
   let leftTriangle = "";
@@ -94,23 +87,12 @@ const generateLeftTriangle = function(base) {
   let lineText = "";
 
   for(let rows = 1; rows <= base ; rows++) {
-    lineText = leftRowsGeneration(rows);
+    lineText = repeat('*',rows);
+    
     leftTriangle = leftTriangle + newline + lineText;
     newline = "\n";
   }
   return leftTriangle;
-}
-
-const rightRowsGeneration = function(base,rows){
-  let message = "";
-  for(let columns=1; columns<=base; columns++){
-    if(columns > base - rows){
-      message += "*";
-    } else {
-      message+= " ";
-    }
-  }
-  return message;
 }
 
 const generateRightTriangle = function(base) {
@@ -118,12 +100,14 @@ const generateRightTriangle = function(base) {
   let newline = "";
   let lineText
   for(let rows = 1; rows <= base ; rows++) {
-    lineText = rightRowsGeneration(base,rows);
+    lineText = repeat(' ',base-rows) + repeat('*',rows);
+
     rightTriangle = rightTriangle + newline + lineText;
     newline= "\n";
   }
   return rightTriangle;
 }
+
 //-----------------
 const generateTriangle = function (triangleAlignment,base) {
   let object  = { left : generateLeftTriangle, right : generateRightTriangle }
