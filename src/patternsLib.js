@@ -1,13 +1,3 @@
-const generateFilledRectangle = function(width,height) {
-  let filledRect = "";
-  let newline = "";
-  for(let rows = 1; rows <= height ; rows++) {
-    filledRect = filledRect + newline + repeat('*',width);
-    newline = "\n";
-  }
-  return filledRect;
-}
-
 const repeat = function (character, noOfTimes) {
   let line = '';
   for (let count = 0; count < noOfTimes; count++) {
@@ -16,61 +6,57 @@ const repeat = function (character, noOfTimes) {
   return line;
 };
 
-emptyLineGenerator = function(terminalCharacter,middleCharacter,width) {
-  let emptyLine = terminalCharacter + repeat(middleCharacter,width-2) + terminalCharacter;
-  return emptyLine;
+const lineGenerator = function(firstChar,middleChar,lastChar,width) {
+  let first = repeat(firstChar,1);
+  let middle = repeat(middleChar,width-2);
+  let last = repeat(lastChar,1);
+  return first+middle+last;
 }
 
-//-----------------emptyrectangle----------
-const firstAndLastLine = function(width) {
-  return repeat('*',width);
+const createLine = function(firstChar,middleChar,lastChar) {
+  return function(width) {
+    return lineGenerator(firstChar,middleChar,lastChar,width);
+  }
 }
 
-const emptyMiddleLines = function (width) {
-  return emptyLineGenerator('*',' ',width);
+const joinLine = function(previousLine,currentLine,delimeter) {
+  return previousLine + delimeter + currentLine;
+}
+
+const filledLine = createLine('*','*','*');
+const emptyLine = createLine('*',' ','*');
+const dashLine = createLine('-','-','-');
+
+const createAnyRectangle = function(width,height,firstLine,middleLine,lastLine) {
+  let delimeter = "\n";
+  let rectangle = firstLine(width);
+  for(let row = 0;row < height-2;row++) {
+    let midLine = middleLine(width);
+    rectangle = joinLine(rectangle,midLine,delimeter);
+  }
+  if(height < 2) {
+    return rectangle;
+  }
+  return joinLine(rectangle,lastLine(width),delimeter);
+}
+
+const generateFilledRectangle = function(width,height) {
+  return createAnyRectangle(width,height,filledLine,filledLine,filledLine);
 }
 
 const generateEmptyRectangle = function(width,height) {
-  let message;
-  let emptyRect = "";
-  let newline = "";
-  for(let rows = 1; rows <= height ; rows++) {
-    message = "";
-    if(rows == 1 || rows == height) {
-      message += firstAndLastLine(width);
-    }else {
-      message += emptyMiddleLines(width);
-    }
-    emptyRect = emptyRect + newline + message;
-    newline = "\n";
-  }
-  return emptyRect;
-}
-//------------------------------------------
-
-const oddRow = function (width) {
-  return repeat('*',width);
-}
-
-const evenRow = function (width) {
-  return repeat('-',width);
+  return createAnyRectangle(width,height,filledLine,emptyLine,filledLine);
 }
 
 const generateAlternatingRectangle = function(width,height) {
-  let message;
-  let newline = "";
-  let alternatingRect ="";
-  for(let rows = 1; rows <= height ; rows++) {
-    message = "";
-    if ((rows % 2) != 0) {
-      message = oddRow(width); 
-    } else {
-      message = evenRow(width);
-    }
-    alternatingRect = alternatingRect + newline + message;
-    newline = "\n";
+  let whichLine = { 0:filledLine, 1:dashLine };
+  let alternateRectangle = "";
+  let delimeter = "";
+  for (let row=0;row < height; row ++) {
+    alternateRectangle = joinLine(alternateRectangle,whichLine[row % 2](width),delimeter);
+    delimeter = "\n";
   }
-  return alternatingRect;
+  return alternateRectangle;
 }
 
 const generateRectangle = function (rectangleType,width,height) {
@@ -88,7 +74,7 @@ const generateLeftTriangle = function(base) {
 
   for(let rows = 1; rows <= base ; rows++) {
     lineText = repeat('*',rows);
-    
+
     leftTriangle = leftTriangle + newline + lineText;
     newline = "\n";
   }
