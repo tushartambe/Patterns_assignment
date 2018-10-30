@@ -1,3 +1,4 @@
+//---------rectangle-------
 const repeat = function (character, noOfTimes) {
   let line = '';
   for (let count = 0; count < noOfTimes; count++) {
@@ -67,34 +68,36 @@ const generateRectangle = function (rectangleType,width,height) {
 
 //----------------------triangle-----------
 
+const initialSpaces = function(noOfTimes) {
+  return repeat(' ',noOfTimes);
+}
+
 const generateLeftTriangle = function(base) {
   let leftTriangle = "";
-  let newline = "";
+  let delimeter = "";
   let lineText = "";
 
   for(let rows = 1; rows <= base ; rows++) {
     lineText = repeat('*',rows);
-
-    leftTriangle = leftTriangle + newline + lineText;
-    newline = "\n";
+    leftTriangle =joinLine(leftTriangle,lineText,delimeter); 
+    delimeter = "\n";
   }
   return leftTriangle;
 }
 
 const generateRightTriangle = function(base) {
   let rightTriangle = "";
-  let newline = "";
+  let delimeter = "";
   let lineText
   for(let rows = 1; rows <= base ; rows++) {
-    lineText = repeat(' ',base-rows) + repeat('*',rows);
+    lineText = initialSpaces(base-rows) + repeat('*',rows);
 
-    rightTriangle = rightTriangle + newline + lineText;
-    newline= "\n";
+    rightTriangle = joinLine(rightTriangle,lineText,delimeter);
+    delimeter= "\n";
   }
   return rightTriangle;
 }
 
-//-----------------
 const generateTriangle = function (triangleAlignment,base) {
   let object  = { left : generateLeftTriangle, right : generateRightTriangle }
   return object[triangleAlignment](base);
