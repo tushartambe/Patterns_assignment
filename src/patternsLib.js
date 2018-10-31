@@ -8,6 +8,9 @@ const repeat = function (character, noOfTimes) {
 };
 
 const lineGenerator = function(firstChar,middleChar,lastChar,width) {
+  if(width < 2) {
+    return firstChar;
+  }
   let first = repeat(firstChar,1);
   let middle = repeat(middleChar,width-2);
   let last = repeat(lastChar,1);
@@ -16,6 +19,9 @@ const lineGenerator = function(firstChar,middleChar,lastChar,width) {
 
 const createLine = function(firstChar,middleChar,lastChar) {
   return function(width) {
+    if(width < 2) {
+      return firstChar;
+    }
     return lineGenerator(firstChar,middleChar,lastChar,width);
   }
 }
@@ -54,6 +60,7 @@ const generateAlternatingRectangle = function(width,height) {
   let alternateRectangle = "";
   let delimeter = "";
   for (let row=0;row < height; row ++) {
+    let selectLineGenerator = whichLine 
     alternateRectangle = joinLine(alternateRectangle,whichLine[row % 2](width),delimeter);
     delimeter = "\n";
   }
@@ -61,7 +68,11 @@ const generateAlternatingRectangle = function(width,height) {
 }
 
 const generateRectangle = function (rectangleType,width,height) {
-  let object  = { filled : generateFilledRectangle, empty : generateEmptyRectangle, alternating :generateAlternatingRectangle };
+  let object  = {};
+  object.filled = generateFilledRectangle;
+  object.empty = generateEmptyRectangle;
+  object.alternating = generateAlternatingRectangle;
+
   return object[rectangleType](width,height);
 }
 
@@ -99,44 +110,39 @@ const generateRightTriangle = function(base) {
 }
 
 const generateTriangle = function (triangleAlignment,base) {
-  let object  = { left : generateLeftTriangle, right : generateRightTriangle }
+  let object  = {};
+  object.left = generateLeftTriangle;
+  object.right =generateRightTriangle;
+
   return object[triangleAlignment](base);
 }
 
 //-----------------
 
 const upperFilledTriangle = function(width) {
-  let message = "";
+  let lineText = "";
   let upperTriangle = "";
   let newline = "";
   for(let rows=1; rows<=width; rows+=2){
-    for(let spaces = 1; spaces <=width - rows; spaces+=2){
-      message += " ";
-    }
-    for(let columns= 1; columns<=rows; columns++){
-      message += "*";
-    }
-    upperTriangle = upperTriangle + newline + message;
+    lineText += initialSpaces((width-rows)/2);
+    lineText += repeat('*',rows);
+    upperTriangle = joinLine(upperTriangle,lineText,newline);
     newline = "\n";
-    message = "";
+    lineText = "";
   }
   return upperTriangle;
 }
 
 const lowerFilledTriangle = function(width) {
-  let message = "";
+  let lineText = "";
   let lowerTriangle = "";
   let newline = "";
   for(let rows=width-2; rows>=1; rows-=2){
-    for(let spaces = 1; spaces <=width - rows; spaces+=2){
-      message += " ";
-    }
-    for(let columns= 1; columns<=rows; columns++){
-      message += "*";
-    }
-    lowerTriangle = lowerTriangle + newline + message;
+    lineText += initialSpaces((width - rows)/2);
+    lineText += repeat('*',rows);
+    lowerTriangle = joinLine(lowerTriangle,lineText, newline);
     newline = "\n";
-    message = "";
+    lineText = "";
   }
   return lowerTriangle;
 } 
@@ -146,46 +152,29 @@ const generateFilledDiamond = function(width) {
 }
 
 const upperHollowTriangle = function(width) {
-  let message = "";
+  let lineText = "";
   let upperTriangle = "";
   let newline = "";
   for(let rows=1; rows<=width; rows+=2){
-    for(let spaces = 1; spaces <=width - rows; spaces+=2){
-      message += " ";
-    }
-    let character = "";
-    for(let columns= 1; columns<=rows; columns++){
-      if ( columns == 1 || columns == rows) {
-        message += "*";
-      } else {
-        message += " ";
-      }
-    }
-    upperTriangle = upperTriangle + newline + message;
+    lineText += initialSpaces((width-rows)/2);
+    lineText += emptyLine(rows);
+    upperTriangle = joinLine(upperTriangle,lineText, newline);
     newline = "\n";
-    message = "";
+    lineText = "";
   }
   return upperTriangle;
 }
 
 const lowerHollowTriangle = function(width) {
-  let message = "";
+  let lineText = "";
   let lowerTriangle = "";
   let newline = "";
   for(let rows=width-2; rows>=1; rows-=2){
-    for(let spaces = 1; spaces <=width - rows; spaces+=2){
-      message += " ";
-    }
-    for(let columns= 1; columns<=rows; columns++){
-      if ( columns == 1 || columns == rows) {
-        message += "*";
-      } else {
-        message += " ";
-      }
-    }
-    lowerTriangle = lowerTriangle + newline + message;
+    lineText += initialSpaces((width-rows)/2);
+    lineText += emptyLine(rows);
+    lowerTriangle = joinLine(lowerTriangle,lineText, newline);
     newline = "\n";
-    message = "";
+    lineText = "";
   }
   return lowerTriangle;
 } 
@@ -195,61 +184,40 @@ const generateHollowDiamond = function(width) {
 }
 
 const upperAngledTraingle = function(width) {
-  let message = "";
+  let lineText = "";
   let newline = "";
   let upperTriangle = "";
   for(let rows=1; rows<=width; rows+=2){
-    for(let spaces = 1; spaces <=width - rows; spaces+=2){
-      message += " ";
+    lineText += initialSpaces((width-rows)/2);
+    
+    if(rows == 1 || rows == width ) {
+      lineText += lineGenerator('*',' ','*',rows);
+    } else {
+      lineText += lineGenerator('/',' ','\\',rows);
     }
-    for(let columns= 1; columns<=rows; columns++){
-      if ( columns == 1 || columns == rows) {
-        if( rows == 1 || rows == width){
-          message += "*";
-        } else {
-          if( columns == 1) {
-            message += "/";
-          }else {
-            message += "\\";
-          }
-        }
-      } else {
-        message += " ";
-      }
-    }
-    upperTriangle = upperTriangle + newline + message;
+    
+    upperTriangle = joinLine(upperTriangle,lineText, newline);
     newline = "\n";
-    message = "";
+    lineText = "";
   }
   return upperTriangle;
 }
 
 const lowerAngledTriangle = function(width) {
-  let message = "";
+  let lineText = "";
   let lowerTriangle = "";
   let newline = "";
   for(let rows=width-2; rows>=1; rows-=2){
-    for(let spaces = 1; spaces <=width - rows; spaces+=2){
-      message += " ";
+    lineText += initialSpaces((width-rows)/2);
+
+    if(rows == 1 || rows == width ) {
+      lineText += lineGenerator('*',' ','*',rows);
+    } else {
+      lineText += lineGenerator('\\',' ','/',rows);
     }
-    for(let columns= 1; columns<=rows; columns++){
-      if ( columns == 1 || columns == rows) {
-        if( rows == width | rows == 1){
-          message += "*";
-        } else {
-          if( columns == 1) {
-            message += "\\";
-          } else {
-            message += "/";
-          }
-        }
-      } else {
-        message += " ";
-      }
-    }
-    lowerTriangle = lowerTriangle + newline + message;
+    lowerTriangle = joinLine(lowerTriangle,lineText, newline);
     newline = "\n";
-    message = "";
+    lineText = "";
   }
   return lowerTriangle;
 } 
