@@ -45,22 +45,22 @@ console.log("+--  Right Triangle tests passed. --+");
 
 //generateDiamond tests
 //filledDiamond 
-assert.equal(generateDiamond("filled",4)," *\n***\n *");
-assert.equal(generateDiamond("filled",5),"  *\n ***\n*****\n ***\n  *");
-assert.equal(generateDiamond("filled",7),"   *\n  ***\n *****\n*******\n *****\n  ***\n   *");
+assert.equal(generateDiamond("filled",4)," * \n***\n * ");
+assert.equal(generateDiamond("filled",5),"  *  \n *** \n*****\n *** \n  *  ");
+assert.equal(generateDiamond("filled",7),"   *   \n  ***  \n ***** \n*******\n ***** \n  ***  \n   *   ");
 
 console.log("+--  Filled Diamond tests passed. --+");
 
 //hollowDiamond
-assert.equal(generateDiamond("hollow",3)," *\n* *\n *");
-assert.equal(generateDiamond("hollow",5),"  *\n * *\n*   *\n * *\n  *");
-assert.equal(generateDiamond("hollow",7),"   *\n  * *\n *   *\n*     *\n *   *\n  * *\n   *");
+assert.equal(generateDiamond("hollow",3)," * \n* *\n * ");
+assert.equal(generateDiamond("hollow",5),"  *  \n * * \n*   *\n * * \n  *  ");
+assert.equal(generateDiamond("hollow",7),"   *   \n  * *  \n *   * \n*     *\n *   * \n  * *  \n   *   ");
 
 console.log("+--  Hollow Diamond tests passed. --+");
 //angledDiamond
-assert.equal(generateDiamond("angled",3)," *\n* *\n *");
-assert.equal(generateDiamond("angled",5),"  *\n / \\\n*   *\n \\ /\n  *");
-assert.equal(generateDiamond("angled",7),"   *\n  / \\\n /   \\\n*     *\n \\   /\n  \\ /\n   *");
+assert.equal(generateDiamond("angled",3)," * \n* *\n * ");
+assert.equal(generateDiamond("angled",5),"  *  \n / \\ \n*   *\n \\ / \n  *  ");
+assert.equal(generateDiamond("angled",7),"   *   \n  / \\  \n /   \\ \n*     *\n \\   / \n  \\ /  \n   *   ");
 
 console.log("+--  Angled Diamond tests passed. --+");
 console.log("+--  CONGRATULATIONS!!! All tests passed. --+");

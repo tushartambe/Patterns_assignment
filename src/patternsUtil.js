@@ -33,18 +33,34 @@ const initialSpaces = function(noOfTimes) {
   return repeat(' ',noOfTimes);
 }
 
-const centerJustifier = function(text,maxLength) {
-  if(!(maxLength % 2)) {
-    maxLength = maxLength - 1;
+const centerJustifier = function(maxLength) {
+  return function(text) {
+    let totalInitialCharaers  = maxLength - text.length;
+    let textLength = text.length;
+    let initialSpaceCount = (totalInitialCharaers - 1)/2;
+    let spaces = repeat(' ',initialSpaceCount);
+
+    return spaces+text+spaces;
   }
-  
-  maxLength = maxLength - text.length;
+}
 
+
+const rightJustifier = function(text,maxLength) {
   let textLength = text.length;
-  let initialSpaceCount = (maxLength - 1)/2;
-  let spaces = repeat(' ',initialSpaceCount);
+  let initialSpaceCount = maxLength - textLength;
 
-  return spaces+text+spaces;
+  return initialSpaces(initialSpaceCount)+text;
+}
+
+const generateLineLengths = function(width) {
+  let lengths =[];
+  let substracter;
+  for(let number = 1; number < width * 2; number += 2) {
+    substracter =( width - number)/2;
+    substracter = Math.abs(substracter);
+    lengths.push(width -( substracter*2));
+  }
+  return lengths;
 }
 
 const getPatternData = function(data) {
@@ -61,4 +77,6 @@ exports.createLine = createLine;
 exports.joinLine = joinLine;
 exports.initialSpaces = initialSpaces;
 exports.centerJustifier = centerJustifier;
+exports.rightJustifier = rightJustifier;
+exports.generateLineLengths = generateLineLengths;
 exports.getPatternData = getPatternData;

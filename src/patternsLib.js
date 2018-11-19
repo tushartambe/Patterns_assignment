@@ -1,27 +1,34 @@
-//---------rectangle-------
 const lib = require('./patternsUtil.js'); 
-let {repeat} = lib;
-let {lineGenerator} = lib;
-let {createLine} = lib;
-let {joinLine} = lib;
-let {initialSpaces} = lib;
-let {centerJustifier} = lib;
+let {repeat,
+lineGenerator,
+createLine,
+joinLine,
+initialSpaces,
+centerJustifier,
+rightJustifier,
+generateLineLengths} = lib;
 
 const filledLine = createLine('*','*','*');
 const emptyLine = createLine('*',' ','*');
 const dashLine = createLine('-','-','-');
+const angledUpperLine = createLine('/',' ','\\');
+const angledLowerLine = createLine('\\',' ','/');
 
-const createAnyRectangle = function(width,height,firstLine,middleLine,lastLine) {
-  let delimeter = "\n";
-  let rectangle = firstLine(width);
+//---------rectangle-------
+
+
+createAnyRectangle = function(width,height,firstLine,middleLine,lastLine) {
+  let rectangle = [];
+  rectangle.push(firstLine(width));
   for(let row = 0;row < height-2;row++) {
-    let midLine = middleLine(width);
-    rectangle = joinLine(rectangle,midLine,delimeter);
+    rectangle.push(middleLine(width)); 
   }
   if(height < 2) {
     return rectangle;
   }
-  return joinLine(rectangle,lastLine(width),delimeter);
+  rectangle.push(lastLine(width));
+
+  return rectangle;
 }
 
 const generateFilledRectangle = function(width,height) {
@@ -34,13 +41,13 @@ const generateEmptyRectangle = function(width,height) {
 
 const generateAlternatingRectangle = function(width,height) {
   let whichLine = { 0:filledLine, 1:dashLine };
-  let alternateRectangle = "";
-  let delimeter = "";
+  let alternateRectangle = [];
+  
   for (let row=0;row < height; row ++) {
-    let selectLineGenerator = whichLine 
-    alternateRectangle = joinLine(alternateRectangle,whichLine[row % 2](width),delimeter);
-    delimeter = "\n";
+    let selectLineGenerator = whichLine; 
+    alternateRectangle.push(whichLine[row % 2](width));
   }
+  
   return alternateRectangle;
 }
 
@@ -50,34 +57,31 @@ const generateRectangle = function (rectangleType,width,height) {
   object.empty = generateEmptyRectangle;
   object.alternating = generateAlternatingRectangle;
 
-  return object[rectangleType](width,height);
+  return object[rectangleType](width,height).join("\n");
 }
-
 
 //----------------------triangle-----------
 
 const generateLeftTriangle = function(base) {
-  let leftTriangle = "";
-  let delimeter = "";
+  let leftTriangle = [];
   let lineText = "";
 
   for(let rows = 1; rows <= base ; rows++) {
-    lineText = repeat('*',rows);
-    leftTriangle =joinLine(leftTriangle,lineText,delimeter); 
-    delimeter = "\n";
+    lineText = filledLine(rows);
+    leftTriangle.push(lineText);
   }
   return leftTriangle;
 }
 
 const generateRightTriangle = function(base) {
-  let rightTriangle = "";
-  let delimeter = "";
-  let lineText
+  let rightTriangle = [];
+  let lineText;
+  let justifiedLine = "";
   for(let rows = 1; rows <= base ; rows++) {
-    lineText = initialSpaces(base-rows) + repeat('*',rows);
-
-    rightTriangle = joinLine(rightTriangle,lineText,delimeter);
-    delimeter= "\n";
+    lineText = filledLine(rows);
+    justifiedLine = rightJustifier(lineText,base);
+    rightTriangle.push(justifiedLine);
+    justifiedLine = "";
   }
   return rightTriangle;
 }
@@ -87,116 +91,46 @@ const generateTriangle = function (triangleAlignment,base) {
   object.left = generateLeftTriangle;
   object.right =generateRightTriangle;
 
-  return object[triangleAlignment](base);
+  return object[triangleAlignment](base).join("\n");
 }
 
 //-----------------
 
-const upperFilledTriangle = function(width) {
-  let lineText = "";
-  let upperTriangle = "";
-  let newline = "";
-  for(let rows=1; rows<=width; rows+=2){
-    lineText += initialSpaces((width-rows)/2);
-    lineText += repeat('*',rows);
-    upperTriangle = joinLine(upperTriangle,lineText,newline);
-    newline = "\n";
-    lineText = "";
-  }
-  return upperTriangle;
-}
-
-const lowerFilledTriangle = function(width) {
-  let lineText = "";
-  let lowerTriangle = "";
-  let newline = "";
-  for(let rows=width-2; rows>=1; rows-=2){
-    lineText += initialSpaces((width - rows)/2);
-    lineText += repeat('*',rows);
-    lowerTriangle = joinLine(lowerTriangle,lineText, newline);
-    newline = "\n";
-    lineText = "";
-  }
-  return lowerTriangle;
-} 
-
 const generateFilledDiamond = function(width) {
-  return upperFilledTriangle(width) + "\n" + lowerFilledTriangle(width);
-}
+  let justifyLine = centerJustifier(width);
+  let lengthsOfLines = generateLineLengths(width);
+  
+  let diamondPattern = lengthsOfLines.map(filledLine);
 
-const upperHollowTriangle = function(width) {
-  let lineText = "";
-  let upperTriangle = "";
-  let newline = "";
-  for(let rows=1; rows<=width; rows+=2){
-    lineText += initialSpaces((width-rows)/2);
-    lineText += emptyLine(rows);
-    upperTriangle = joinLine(upperTriangle,lineText, newline);
-    newline = "\n";
-    lineText = "";
-  }
-  return upperTriangle;
+  return diamondPattern.map(justifyLine);
 }
-
-const lowerHollowTriangle = function(width) {
-  let lineText = "";
-  let lowerTriangle = "";
-  let newline = "";
-  for(let rows=width-2; rows>=1; rows-=2){
-    lineText += initialSpaces((width-rows)/2);
-    lineText += emptyLine(rows);
-    lowerTriangle = joinLine(lowerTriangle,lineText, newline);
-    newline = "\n";
-    lineText = "";
-  }
-  return lowerTriangle;
-} 
 
 const generateHollowDiamond = function(width) {
-  return upperHollowTriangle(width) + "\n" + lowerHollowTriangle(width);
+  let justifyLine = centerJustifier(width);
+  let lengthsOfLines = generateLineLengths(width);
+  
+  let diamondPattern = lengthsOfLines.map(emptyLine);
+
+  return diamondPattern.map(justifyLine);
 }
-
-const upperAngledTraingle = function(width) {
-  let lineText = "";
-  let newline = "";
-  let upperTriangle = "";
-  for(let rows=1; rows<=width; rows+=2){
-    lineText += initialSpaces((width-rows)/2);
-    
-    if(rows == 1 || rows == width ) {
-      lineText += lineGenerator('*',' ','*',rows);
-    } else {
-      lineText += lineGenerator('/',' ','\\',rows);
-    }
-    
-    upperTriangle = joinLine(upperTriangle,lineText, newline);
-    newline = "\n";
-    lineText = "";
-  }
-  return upperTriangle;
-}
-
-const lowerAngledTriangle = function(width) {
-  let lineText = "";
-  let lowerTriangle = "";
-  let newline = "";
-  for(let rows=width-2; rows>=1; rows-=2){
-    lineText += initialSpaces((width-rows)/2);
-
-    if(rows == 1 || rows == width ) {
-      lineText += lineGenerator('*',' ','*',rows);
-    } else {
-      lineText += lineGenerator('\\',' ','/',rows);
-    }
-    lowerTriangle = joinLine(lowerTriangle,lineText, newline);
-    newline = "\n";
-    lineText = "";
-  }
-  return lowerTriangle;
-} 
 
 const generateAngledDiamond = function(width) {
-  return upperAngledTraingle(width) + "\n" + lowerAngledTriangle(width);
+  let justifyLine = centerJustifier(width);
+  let lengthsOfLines = generateLineLengths(width);
+  let diamondPattern = [];
+  for(let counter = 0; counter < width; counter++) {
+    if(counter == 0 || counter == Math.floor(width/2) || counter == width -1) {
+      diamondPattern.push(emptyLine(lengthsOfLines[counter]));
+    }
+    if(counter > 0 && counter < Math.floor(width/2)) {
+      diamondPattern.push(angledUpperLine(lengthsOfLines[counter]));
+    }
+    if(counter > Math.floor(width/2) && counter < (width - 1) ) {
+      diamondPattern.push(angledLowerLine(lengthsOfLines[counter]));
+    }
+
+  }
+  return diamondPattern.map(justifyLine);
 }
 
 const generateDiamond = function(diamondType,width) {
@@ -204,7 +138,7 @@ const generateDiamond = function(diamondType,width) {
     width = width - 1;
   }
   let object  = { filled : generateFilledDiamond, hollow : generateHollowDiamond, angled :generateAngledDiamond };
-  return object[diamondType](width);
+  return object[diamondType](width).join("\n");
 }
 exports.generateRectangle = generateRectangle;
 exports.generateTriangle = generateTriangle;
