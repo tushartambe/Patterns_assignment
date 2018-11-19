@@ -1,34 +1,11 @@
 //---------rectangle-------
-const repeat = function (character, noOfTimes) {
-  let line = '';
-  for (let count = 0; count < noOfTimes; count++) {
-    line = line + character;
-  }
-  return line;
-};
-
-const lineGenerator = function(firstChar,middleChar,lastChar,width) {
-  if(width < 2) {
-    return firstChar;
-  }
-  let first = repeat(firstChar,1);
-  let middle = repeat(middleChar,width-2);
-  let last = repeat(lastChar,1);
-  return first+middle+last;
-}
-
-const createLine = function(firstChar,middleChar,lastChar) {
-  return function(width) {
-    if(width < 2) {
-      return firstChar;
-    }
-    return lineGenerator(firstChar,middleChar,lastChar,width);
-  }
-}
-
-const joinLine = function(previousLine,currentLine,delimeter) {
-  return previousLine + delimeter + currentLine;
-}
+const lib = require('./patternsUtil.js'); 
+let {repeat} = lib;
+let {lineGenerator} = lib;
+let {createLine} = lib;
+let {joinLine} = lib;
+let {initialSpaces} = lib;
+let {centerJustifier} = lib;
 
 const filledLine = createLine('*','*','*');
 const emptyLine = createLine('*',' ','*');
@@ -78,10 +55,6 @@ const generateRectangle = function (rectangleType,width,height) {
 
 
 //----------------------triangle-----------
-
-const initialSpaces = function(noOfTimes) {
-  return repeat(' ',noOfTimes);
-}
 
 const generateLeftTriangle = function(base) {
   let leftTriangle = "";

@@ -9,3 +9,4 @@ assert.deepEqual(getPatternData([,,'right',9,5]),{type:'right',width:9,height:5}
 
 assert.deepEqual(getPatternData([,,'angled',9,3]),{type:'angled',width:9,height:3});
 assert.deepEqual(getPatternData([,,'hollow',5,8]),{type:'hollow',width:5,height:8});
+console.log("All Tests passed!!");
